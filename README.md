@@ -100,7 +100,7 @@ The complete report contains the incident timeline, authentication analysis,
 MySQL investigation, indicators of compromise, KQL analysis, containment actions
 and host-based DFIR assessment.
 
-### [📄 View Full Incident Response & DFIR Report](YOUR-GOOGLE-DOC-LINK)
+### [https://docs.google.com/document/d/1Lxonfqcq7GOItQXcCARFLMjYPtRbDZY3bCDtFnkL43A/edit?usp=sharing)
 
 ---
 
