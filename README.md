@@ -96,11 +96,9 @@ Eradication and restoration were outside the scope of the collected evidence.
 
 ## 📄 Full Investigation Report
 
-The complete report contains the incident timeline, authentication analysis,
-MySQL investigation, indicators of compromise, KQL analysis, containment actions
-and host-based DFIR assessment.
+The complete report includes the incident timeline, authentication analysis, MySQL investigation, indicators of compromise, KQL analysis, containment actions and host-based DFIR assessment.
 
-### [https://docs.google.com/document/d/1Lxonfqcq7GOItQXcCARFLMjYPtRbDZY3bCDtFnkL43A/edit?usp=sharing)
+**📘 [View Full Incident Response & DFIR Assessment](https://docs.google.com/document/d/1Lxonfqcq7GOItQXcCARFLMjYPtRbDZY3bCDtFnkL43A/edit?usp=sharing)**
 
 ---
 
