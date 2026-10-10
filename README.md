@@ -19,6 +19,14 @@ Sentinel, KQL and MDE forensic investigation packages.
 
 ---
 
+## 📄 Full Investigation Report
+
+The complete report includes the incident timeline, authentication analysis, MySQL investigation, indicators of compromise, KQL analysis, containment actions and host-based DFIR assessment.
+
+**📘 [View Full Incident Response & DFIR Assessment](https://docs.google.com/document/d/1Lxonfqcq7GOItQXcCARFLMjYPtRbDZY3bCDtFnkL43A/edit?usp=sharing)**
+
+---
+
 ## 📌 Key Findings
 
 | Investigation area | Evidence-based finding |
@@ -211,13 +219,6 @@ Eradication and restoration were outside the scope of the collected evidence.
 
 ---
 
-## 📄 Full Investigation Report
-
-The complete report includes the incident timeline, authentication analysis, MySQL investigation, indicators of compromise, KQL analysis, containment actions and host-based DFIR assessment.
-
-**📘 [View Full Incident Response & DFIR Assessment](https://docs.google.com/document/d/1Lxonfqcq7GOItQXcCARFLMjYPtRbDZY3bCDtFnkL43A/edit?usp=sharing)**
-
----
 
 ## ⚠️ Lab Disclaimer
 
