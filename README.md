@@ -38,7 +38,7 @@ Several sources progressed from failed attempts to successful network authentica
 ## 🔎 Authentication Investigation
 
 ![Windows Authentication Timeline]
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/b655c03a-df13-4daf-8696-884583f557ef" />
+<img width="1000" alt="image" src="https://github.com/user-attachments/assets/b655c03a-df13-4daf-8696-884583f557ef" />
 
 
 Analysis of Windows authentication telemetry identified repeated failed
