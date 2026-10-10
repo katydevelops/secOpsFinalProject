@@ -21,8 +21,6 @@ Sentinel, KQL and MDE forensic investigation packages.
 
 ## 🌎 Inbound Authentication Activity
 
-![Inbound Windows Authentication Origins]
-
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/bdf6aee7-c900-41fd-82f6-0146bfe48a15" />
 
 Public source IP addresses were observed attempting network authentication against
@@ -37,7 +35,6 @@ Several sources progressed from failed attempts to successful network authentica
 
 ## 🔎 Authentication Investigation
 
-![Windows Authentication Timeline]
 <img width="1000" alt="image" src="https://github.com/user-attachments/assets/b655c03a-df13-4daf-8696-884583f557ef" />
 
 
@@ -68,7 +65,6 @@ evidence confirming data exfiltration was not identified during the investigatio
 
 ## 🔬 Host DFIR Analysis
 
-![Post-Isolation Network Evidence]
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/85a24378-62a2-4157-a722-2552cb6ec187" />
 
 
@@ -88,7 +84,6 @@ pre-compromise baseline.
 
 ## 🛡️ Containment
 
-![Microsoft Defender Endpoint Isolation]
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/bba3386a-699e-47bb-92b7-2ece87680777" />
 
 
