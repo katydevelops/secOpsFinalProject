@@ -24,7 +24,7 @@ The analysis distinguishes confirmed malicious activity from events that could n
 
 The complete report includes the incident timeline, Windows authentication analysis, MySQL investigation, indicators of compromise, KQL analysis, containment actions and host-based DFIR assessment.
 
-**📘 [View Full Incident Response & DFIR Assessment](https://drive.google.com/file/d/1WF-FYnWHMgB5EV2r2rcUQLQ0v-THIUrq/view?usp=drive_link) **
+📘 [View Full Incident Response & DFIR Assessment](https://drive.google.com/file/d/1WF-FYnWHMgB5EV2r2rcUQLQ0v-THIUrq/view?usp=drive_link)
 
 ---
 
