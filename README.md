@@ -62,7 +62,7 @@ The investigation reconstructed the following sequence of activity using Windows
 
 ## 🌎 Inbound Authentication Activity
 
-<img width="800" alt="Geographic visualization of external authentication source IP addresses" src="https://github.com/user-attachments/assets/bdf6aee7-c900-41fd-82f6-0146bfe48a15" />
+<img width="1000" alt="Geographic visualization of external authentication source IP addresses" src="https://github.com/user-attachments/assets/bdf6aee7-c900-41fd-82f6-0146bfe48a15" />
 
 Public source IP addresses were observed attempting network authentication against the honeypot from infrastructure geolocated across multiple countries.
 
