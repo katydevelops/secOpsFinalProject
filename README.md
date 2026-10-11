@@ -1,6 +1,6 @@
 # 🔐 Azure Honeypot — Incident Response & DFIR Capstone
 
-<img width="1000" alt="image" src="https://github.com/user-attachments/assets/41e136c5-1264-4c9a-b22e-8844ad5b6534" />
+<img width="1000" alt="Azure Honeypot header image" src="https://github.com/user-attachments/assets/41e136c5-1264-4c9a-b22e-8844ad5b6534" />
 
 ## 🔎 Overview
 
@@ -124,8 +124,10 @@ DeviceLogonEvents
     by RemoteIP
 | order by Attempts desc
 ```
-
 </details>
+
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/482b3956-7d90-415b-90f8-f285882a30ca" />
+
 
 ### 2. Windows Authentication Investigation
 
@@ -153,8 +155,10 @@ DeviceLogonEvents
     FailureReason
 | order by Timestamp asc
 ```
-
 </details>
+
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/c15dd9e3-32f1-4ee2-be3c-82d674f2f3c1" />
+
 
 ### 3. MySQL Authentication Investigation
 
@@ -177,8 +181,9 @@ MySQLAudit_CL
     RawData
 | order by TimeGenerated asc
 ```
-
 </details>
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/1560eac4-8e36-45e7-8af6-e3539fdfddef" />
+
 
 ### 4. Destructive MySQL Activity
 
@@ -206,8 +211,10 @@ MySQLAudit_CL
     RawData
 | order by TimeGenerated asc
 ```
-
 </details>
+
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/ab459d25-d5d9-419a-a788-1d958da283b4" />
+
 
 ### 5. Suspected Windows Credential Attack
 
@@ -235,8 +242,9 @@ DeviceLogonEvents
     FailureReason
 | order by Timestamp asc
 ```
-
 </details>
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/01b0cfcd-4993-46bb-b7d2-a6f100003ff4" />
+
 
 **Key Takeaway:** Correlating Windows authentication events with MySQL audit telemetry helped distinguish suspicious credential activity from observed database compromise. Successful network authentication did not independently establish interactive RDP access, and the attacker's claim of data exfiltration remained unverified.
 
