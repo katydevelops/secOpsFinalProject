@@ -1,27 +1,28 @@
-# 🔐 Azure Honeypot — Incident Response & DFIR
+# 🔐 Azure Honeypot — Incident Response & DFIR Capstone
 
-## Overview
+<img width="1000" alt="image" src="https://github.com/user-attachments/assets/41e136c5-1264-4c9a-b22e-8844ad5b6534" />
 
-This project documents the investigation of an intentionally exposed Windows 11
-honeypot hosted in Microsoft Azure.
+## 🔎 Overview
 
-During an approximately 72-hour observation period, the system experienced repeated
-internet-based authentication attempts, successful Windows network authentication
-and compromise of an exposed MySQL service.
+This project documents an approximately 72-hour security investigation of an intentionally exposed Windows 11 honeypot hosted in Microsoft Azure.
 
-The investigation was conducted using Microsoft Defender for Endpoint, Microsoft
-Sentinel, KQL and MDE forensic investigation packages.
+During the observation period, the endpoint experienced repeated internet-based authentication attempts, successful Windows network logons and compromise of an exposed MySQL service involving destructive database operations and ransom-related artifacts.
 
-### Technologies
+The investigation used Microsoft Defender for Endpoint, Microsoft Sentinel, KQL, MySQL audit telemetry and MDE forensic investigation packages to reconstruct suspicious activity, evaluate potential attacker access and assess the effectiveness of endpoint containment.
 
-`Microsoft Azure` · `Microsoft Defender for Endpoint` · `Microsoft Sentinel` ·
-`KQL` · `Windows 11` · `MySQL` · `DFIR`
+The analysis distinguishes confirmed malicious activity from events that could not be independently verified, including interactive RDP access, data exfiltration and persistent host compromise.
+
+### 🛠️ Technologies
+
+`Microsoft Azure` · `Microsoft Defender for Endpoint` · `Microsoft Sentinel` · `KQL` · `Windows 11` · `MySQL` · `DFIR`
+
+**Observation Window:** October 6–9, 2026 (UTC)
 
 ---
 
 ## 📄 Full Investigation Report
 
-The complete report includes the incident timeline, authentication analysis, MySQL investigation, indicators of compromise, KQL analysis, containment actions and host-based DFIR assessment.
+The complete report includes the incident timeline, Windows authentication analysis, MySQL investigation, indicators of compromise, KQL analysis, containment actions and host-based DFIR assessment.
 
 **📘 [View Full Incident Response & DFIR Assessment](https://docs.google.com/document/d/1Lxonfqcq7GOItQXcCARFLMjYPtRbDZY3bCDtFnkL43A/edit?usp=sharing)**
 
@@ -29,199 +30,301 @@ The complete report includes the incident timeline, authentication analysis, MyS
 
 ## 📌 Key Findings
 
-| Investigation area | Evidence-based finding |
+| Investigation Area | Evidence-Based Finding |
 |---|---|
-| Windows authentication | One source generated 7 failed administrator logons followed by 3 successful network logons |
-| Network activity | Related telemetry included SMB (445) and RPC (135); interactive RDP access was not established |
-| MySQL | Privileged authentication, enumeration, destructive database operations and ransom-related artifacts were observed |
-| Exfiltration | The ransom message claimed data was backed up, but exfiltration was not independently confirmed |
-| Host forensics | Compared two post-compromise MDE investigation packages, one before and one after isolation |
-| Response | MDE isolation supported network containment; eradication and restoration were not verified |
+| Windows Authentication | One source generated 7 failed administrator logons followed by 3 successful network logons |
+| Network Activity | Related telemetry included SMB (445) and RPC (135); interactive RDP access was not established |
+| MySQL Compromise | Privileged authentication, enumeration, destructive database operations and ransom-related artifacts were observed |
+| Data Exfiltration | The ransom message claimed data was backed up, but exfiltration was not independently confirmed |
+| Host Forensics | Compared two post-compromise MDE investigation packages, one before and one after isolation |
+| Incident Response | MDE isolation supported network containment; eradication and restoration were not verified |
+
+---
+
+## ⏱️ Incident Timeline
+
+The investigation reconstructed the following sequence of activity using Windows authentication telemetry, MySQL audit records and endpoint forensic evidence.
+
+| Investigation Phase | Observed Activity |
+|---|---|
+| Honeypot Exposure | Windows 11 Azure endpoint intentionally exposed for security research |
+| Initial Authentication Activity | External sources generated repeated authentication attempts |
+| Windows Authentication | Failed administrator logons and successful network authentication events identified |
+| MySQL Compromise | Privileged database access, enumeration and destructive SQL operations observed |
+| Ransom-Related Activity | Ransom database and related artifacts identified in MySQL audit telemetry |
+| Incident Investigation | Windows, MySQL and endpoint telemetry analyzed using KQL and MDE forensic packages |
+| Containment | Endpoint isolated using Microsoft Defender for Endpoint |
+| Post-Containment Assessment | Second forensic package collected to assess endpoint state after isolation |
+
+**Note:** The timeline summarizes observed activity and investigative phases. It does not establish that the Windows authentication events and MySQL compromise originated from the same attacker or formed a single attack chain.
 
 ---
 
 ## 🌎 Inbound Authentication Activity
 
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/bdf6aee7-c900-41fd-82f6-0146bfe48a15" />
+<img width="800" alt="Geographic visualization of external authentication source IP addresses" src="https://github.com/user-attachments/assets/bdf6aee7-c900-41fd-82f6-0146bfe48a15" />
 
-Public source IP addresses were observed attempting network authentication against
-the honeypot from infrastructure geolocated across multiple countries.
+Public source IP addresses were observed attempting network authentication against the honeypot from infrastructure geolocated across multiple countries.
 
-Several sources progressed from failed attempts to successful network authentication.
+Multiple external sources generated authentication activity, including failed attempts and successful network logons. One source produced a documented sequence of seven failed administrator logons followed by three successful network logons.
 
-> **Note:** IP geolocation represents observed source infrastructure and does not
-> establish the physical location or identity of an attacker.
+> **Note:** IP geolocation represents observed source infrastructure and does not establish the physical location or identity of an attacker.
 
 ---
 
-## 🔎 Authentication Investigation
+## 🔎 Windows Authentication Investigation
 
-<img width="1000" alt="image" src="https://github.com/user-attachments/assets/b655c03a-df13-4daf-8696-884583f557ef" />
+<img width="1000" alt="Microsoft Defender authentication telemetry showing failed and successful network logons" src="https://github.com/user-attachments/assets/b655c03a-df13-4daf-8696-884583f557ef" />
 
+Analysis of Windows authentication telemetry identified repeated failed administrator logons followed by successful network authentication.
 
-Analysis of Windows authentication telemetry identified repeated failed
-administrator logons followed by successful network authentication.
+One external source, `182.180.164.70`, generated seven failed administrator authentication attempts followed by three successful network logons.
 
-One source generated seven failed administrator authentication attempts followed
-by three successful network logons. Related network telemetry showed activity
-associated with SMB (445) and RPC (135).
+Related network telemetry included activity associated with SMB (445) and RPC (135).
 
-Successful network authentication was confirmed. Interactive RDP access or
-post-authentication code execution was not established by these events alone.
+The authentication events established that successful network logons occurred. However, these events alone did not establish interactive RDP access, post-authentication code execution or a causal relationship with the MySQL compromise.
 
+This distinction was important when evaluating the extent of unauthorized access and avoiding conclusions unsupported by the available telemetry.
 
-## 🔎 KQL Investigation Queries
+---
 
-The following KQL queries were used during the investigation in Microsoft Defender Advanced Hunting and Azure Log Analytics to examine authentication activity, identify suspicious source IPs and investigate destructive MySQL operations.
+## 🔬 KQL Investigation Queries
+
+The following queries demonstrate the investigative approach used to examine Windows authentication activity, identify suspicious external sources and investigate destructive MySQL operations.
+
+Queries are organized by their intended execution environment:
+
+- **Microsoft Defender Advanced Hunting:** Windows authentication and source IP investigation
+- **Azure Log Analytics:** MySQL audit telemetry and destructive database activity
+
+The Defender queries use the standard `Timestamp` field from `DeviceLogonEvents`. The MySQL queries use `TimeGenerated` from the custom Log Analytics table.
+
+> **Query validation note:** The MySQL queries below use the incident observation window without an unverified `_ResourceId` hostname extraction. If the workspace contains multiple MySQL log sources, an additional host-specific filter should be validated against the actual audit schema before running the queries.
+
+### 1. IOC Investigation — External Authentication Sources
+
+**Environment:** Microsoft Defender Advanced Hunting
+
+Identifies external IP addresses associated with authentication events, including attempted accounts, authentication outcomes and first/last observed activity.
 
 <details>
-<summary><strong>1. IOC Hunt — External Authentication Sources</strong></summary>
-
-Identified external IP addresses connecting to the honeypot, including authentication attempts, associated accounts and first/last observed activity.
+<summary><strong>View KQL Query</strong></summary>
 
 ```kql
 let MyDevice = "hq-fe29312";
 DeviceLogonEvents
-| where DeviceName == MyDevice
+| where DeviceName =~ MyDevice
 | where isnotempty(RemoteIP)
-| summarize Attempts=count(),
-            FirstSeen=min(TimeGenerated),
-            LastSeen=max(TimeGenerated),
-            Actions=make_set(ActionType),
-            Accounts=make_set(AccountName)
+| summarize
+    Attempts=count(),
+    FirstSeen=min(Timestamp),
+    LastSeen=max(Timestamp),
+    Actions=make_set(ActionType),
+    Accounts=make_set(AccountName)
     by RemoteIP
 | order by Attempts desc
 ```
 
 </details>
 
-<details>
-<summary><strong>2. Windows Authentication Investigation</strong></summary>
+### 2. Windows Authentication Investigation
 
-Reviewed successful and failed authentication events involving the local administrator and guest accounts during the incident window.
+**Environment:** Microsoft Defender Advanced Hunting
+
+Reviews successful and failed authentication events involving the local administrator and guest accounts during the incident observation window.
+
+<details>
+<summary><strong>View KQL Query</strong></summary>
 
 ```kql
 let START_TIME = datetime(2026-10-06T01:49:58.6192813Z);
 let END_TIME = datetime(2026-10-09T02:00:50Z);
 let MyDevice = "hq-fe29312";
 DeviceLogonEvents
-| where TimeGenerated between (START_TIME .. END_TIME)
-| where DeviceName == MyDevice
+| where Timestamp between (START_TIME .. END_TIME)
+| where DeviceName =~ MyDevice
 | where AccountName in~ ("administrator", "guest")
-| project TimeGenerated, RemoteIP, AccountName, ActionType, LogonType, FailureReason
-| order by TimeGenerated asc
+| project
+    Timestamp,
+    RemoteIP,
+    AccountName,
+    ActionType,
+    LogonType,
+    FailureReason
+| order by Timestamp asc
 ```
 
 </details>
 
-<details>
-<summary><strong>3. MySQL Authentication Investigation</strong></summary>
+### 3. MySQL Authentication Investigation
 
-Examined MySQL connection events to identify remote authentication activity against the exposed database service.
+**Environment:** Azure Log Analytics
+
+Examines MySQL connection audit events during the observation window to identify database authentication activity.
+
+<details>
+<summary><strong>View KQL Query</strong></summary>
 
 ```kql
-let MyDevice = "hq-fe29312";
 let START_TIME = datetime(2026-10-06T01:49:58.6192813Z);
 let END_TIME = datetime(2026-10-09T02:00:50Z);
 MySQLAudit_CL
-| extend DeviceName = tostring(split(_ResourceId, "/")[-1])
 | where TimeGenerated between (START_TIME .. END_TIME)
-| where DeviceName == MyDevice
-| where RawData has "Connect"
-| project TimeGenerated, DeviceName, RawData
+| where RawData contains "Connect"
+| project
+    TimeGenerated,
+    _ResourceId,
+    RawData
 | order by TimeGenerated asc
 ```
 
 </details>
 
-<details>
-<summary><strong>4. Destructive MySQL Activity</strong></summary>
+### 4. Destructive MySQL Activity
 
-Investigated SQL activity associated with database deletion, ransom-note creation, binary-log manipulation and service shutdown.
+**Environment:** Azure Log Analytics
+
+Investigates SQL activity associated with database deletion, ransom-related artifacts, binary-log manipulation and service shutdown.
+
+<details>
+<summary><strong>View KQL Query</strong></summary>
 
 ```kql
-let MyDevice = "hq-fe29312";
 let START_TIME = datetime(2026-10-06T01:49:58.6192813Z);
 let END_TIME = datetime(2026-10-09T02:00:50Z);
 MySQLAudit_CL
-| extend DeviceName = tostring(split(_ResourceId, "/")[-1])
 | where TimeGenerated between (START_TIME .. END_TIME)
-| where DeviceName == MyDevice
-| where RawData has "Query"
-| where RawData has_any ("DROP DATABASE", "RECOVER_YOUR_DATA", "RESET MASTER", "PURGE BINARY LOGS", "SHUTDOWN")
-| project TimeGenerated, RawData
+| where RawData contains "Query"
+| where RawData contains "DROP DATABASE"
+    or RawData contains "RECOVER_YOUR_DATA"
+    or RawData contains "RESET MASTER"
+    or RawData contains "PURGE BINARY LOGS"
+    or RawData contains "SHUTDOWN"
+| project
+    TimeGenerated,
+    _ResourceId,
+    RawData
 | order by TimeGenerated asc
 ```
 
 </details>
 
-<details>
-<summary><strong>5. Suspected Windows Credential Attack</strong></summary>
+### 5. Suspected Windows Credential Attack
 
-Isolated authentication events from `182.180.164.70`, revealing seven failed administrator logons followed by three successful network authentications.
+**Environment:** Microsoft Defender Advanced Hunting
+
+Isolates authentication events associated with `182.180.164.70`, the source that generated seven failed administrator logons followed by three successful network logons.
+
+<details>
+<summary><strong>View KQL Query</strong></summary>
 
 ```kql
+let START_TIME = datetime(2026-10-06T01:49:58.6192813Z);
+let END_TIME = datetime(2026-10-09T02:00:50Z);
 let SuspectIP = "182.180.164.70";
 DeviceLogonEvents
-| where DeviceName == "hq-fe29312"
+| where Timestamp between (START_TIME .. END_TIME)
+| where DeviceName =~ "hq-fe29312"
 | where RemoteIP == SuspectIP
-| project TimeGenerated, RemoteIP, AccountName, ActionType, LogonType, FailureReason
-| order by TimeGenerated asc
+| project
+    Timestamp,
+    RemoteIP,
+    AccountName,
+    ActionType,
+    LogonType,
+    FailureReason
+| order by Timestamp asc
 ```
 
 </details>
 
-**Key takeaway:** Correlating Windows authentication events with MySQL audit telemetry helped distinguish credential-guessing activity from confirmed unauthorized access and destructive database operations. Successful network authentication did not independently establish interactive RDP access, and the attacker's claim of data exfiltration remained unverified.
+**Key Takeaway:** Correlating Windows authentication events with MySQL audit telemetry helped distinguish suspicious credential activity from observed database compromise. Successful network authentication did not independently establish interactive RDP access, and the attacker's claim of data exfiltration remained unverified.
 
 ---
 
 ## 🗄️ MySQL Compromise
 
-The exposed MySQL service also experienced successful privileged authentication.
+The exposed MySQL service experienced successful privileged authentication during the observation period.
 
-Investigation of the MySQL audit telemetry identified database discovery,
-enumeration, destructive database operations, creation of a ransom database,
-ransom-related artifacts and eventual shutdown of the MySQL service.
+Analysis of MySQL audit telemetry identified:
 
-The attacker's ransom message claimed that data had been backed up. Independent
-evidence confirming data exfiltration was not identified during the investigation.
+- Database discovery and enumeration
+- Privileged database authentication
+- Destructive database operations
+- Creation of a ransom-related database and associated artifacts
+- Binary-log manipulation activity
+- MySQL service shutdown activity
+
+These findings supported a confirmed compromise of the exposed database service.
+
+The attacker's ransom message claimed that data had been backed up. However, independent evidence confirming successful data exfiltration was not identified during the investigation.
+
+The available evidence also did not establish a direct causal relationship between the observed Windows network authentication activity and the MySQL compromise.
 
 ---
 
 ## 🔬 Host DFIR Analysis
 
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/85a24378-62a2-4157-a722-2552cb6ec187" />
+<img width="800" alt="Microsoft Defender endpoint forensic investigation package analysis" src="https://github.com/user-attachments/assets/85a24378-62a2-4157-a722-2552cb6ec187" />
 
+Two Microsoft Defender investigation packages were analyzed to compare the endpoint before and after containment.
 
-Two Microsoft Defender investigation packages were analyzed to compare the endpoint
-before and after containment.
+The first package was collected after compromise but before endpoint isolation. The second package was collected after isolation.
 
-The first package was collected after compromise but before endpoint isolation,
-while the second was collected after isolation. The comparison identified reduced
-network state and Microsoft Defender containment artifacts without clear evidence
-of newly established persistence between the two snapshots.
+The comparison identified reduced network state and Microsoft Defender containment artifacts without clear evidence of newly established persistence between the two snapshots.
 
-Because no clean pre-exposure forensic package was available, the first package
-was treated as the earliest available comparative baseline rather than a pristine
-pre-compromise baseline.
+Because no clean pre-exposure forensic package was available, the first package was treated as the earliest available comparative baseline rather than a pristine pre-compromise baseline.
+
+This limitation prevented definitive conclusions about whether persistence mechanisms existed before the first forensic collection.
+
+The forensic comparison therefore focused on observable changes between the available endpoint snapshots rather than claiming complete reconstruction of the host's pre-compromise state.
 
 ---
 
-## 🛡️ Containment
+## 🛡️ Incident Containment
 
-<img width="800" alt="image" src="https://github.com/user-attachments/assets/bba3386a-699e-47bb-92b7-2ece87680777" />
-
+<img width="800" alt="Microsoft Defender for Endpoint isolation and containment evidence" src="https://github.com/user-attachments/assets/bba3386a-699e-47bb-92b7-2ece87680777" />
 
 The affected endpoint was isolated using Microsoft Defender for Endpoint.
 
-Post-isolation forensic evidence supported successful network containment.
-Eradication and restoration were outside the scope of the collected evidence.
+Post-isolation forensic evidence supported successful network containment, including reduced network state and containment-related artifacts.
+
+However, endpoint isolation alone did not establish that malicious artifacts were eradicated or that the system was restored to a trusted state.
+
+**Response Assessment:**
+
+| Response Phase | Assessment |
+|---|---|
+| Detection | Suspicious authentication and destructive MySQL activity identified |
+| Investigation | Windows, MySQL and endpoint forensic evidence analyzed |
+| Containment | MDE endpoint isolation performed with supporting post-isolation evidence |
+| Eradication | Not independently verified |
+| Recovery | Not independently verified |
+
+The response assessment was limited to actions performed and evidence collected during the authorized lab exercise.
 
 ---
 
+## 📚 Lessons Learned
+
+This investigation reinforced several important incident response and digital forensics principles.
+
+**Authentication does not automatically establish attacker control.** Successful Windows network logons require additional evidence before concluding that interactive access or code execution occurred.
+
+**Database audit telemetry can provide critical evidence of compromise.** MySQL records helped identify privileged access, destructive operations and ransom-related activity that could not be established through Windows authentication logs alone.
+
+**Attacker claims require independent verification.** A ransom message claiming data exfiltration is not equivalent to confirmed outbound data transfer.
+
+**Forensic collection timing matters.** Without a clean pre-compromise baseline, conclusions about persistence and historical endpoint state must remain limited to available evidence.
+
+**Containment is not eradication.** Network isolation can restrict further communication without proving that an endpoint is free of malicious artifacts or ready for restoration.
+
+---
 
 ## ⚠️ Lab Disclaimer
 
 This project was conducted in an authorized cybersecurity lab environment.
-The system was intentionally configured and exposed for defensive security
-research, incident response and digital forensics practice.
+
+The Windows 11 endpoint was intentionally configured and exposed for defensive security research, incident response and digital forensics practice.
+
+All investigative activity was performed within the scope of the authorized lab environment.
